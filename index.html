@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="stylesheets/github-light.css">
 
     <script type="text/javascript" src="javascripts/modernizr.js"></script>
+    <script type="text/javascript" src="javascripts/compress.js"></script>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
     <script type="text/javascript" src="javascripts/headsmart.min.js"></script>
     <script type="text/javascript">
@@ -19,6 +20,31 @@
     </script>
     <title>Decrypt by luanrafael</title>
   </head>
+
+  <style type="text/css">
+
+    .row {
+      width: 50%;
+      margin: 0 auto;
+      margin-top: 5px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 150px;
+    }
+
+    input {
+      width: 100%;
+    }
+
+    button {
+      width: 100%;
+      height: 25px;
+      margin-top: 5px;
+    }
+
+  </style>
 
   <body>
     <a id="forkme_banner" href="https://github.com/luanrafael/decrypt">View on GitHub</a>
@@ -46,7 +72,18 @@
 
 
       <section id="main_content">
-        <p>:D</p>
+        <div class="row">
+          <textarea row="10" id="texto"></textarea>
+        </div>
+
+        <div class="row">
+          <input type="password" id="password" placeholder="se vc não souber a senha, não vai ler!">
+        </div>
+
+        <div class="row">
+          <button id="btnCript"> Criptografar </button>
+          <button id="btnDecript"> Descriptografar </button>
+        </div>
       </section>
 
       <footer>
@@ -65,4 +102,46 @@
 
     
   </body>
+
+  <script type="text/javascript">
+    
+    var btnCript = document.querySelector("#btnCript");
+    var btnDecript = document.querySelector("#btnDecript");
+    var texto = document.querySelector("#texto");
+    var password = document.querySelector("#password");
+
+    btnCript.addEventListener("click", function(){
+
+      if(!check_pass(password.value)){
+        alert('Favor informar a senha...')
+        return;
+      }
+
+      var comp = LZW.compress(texto.value.trim(), password.value);
+      
+      texto.value = comp;
+
+
+    }); 
+
+    btnDecript.addEventListener("click", function(){
+
+      if(!check_pass(password.value)){
+        alert('Favor informar a senha...')
+        return;
+      }
+
+      var result = LZW.decompress(texto.value, password.value);
+
+      texto.value = result;
+
+    });
+
+    function check_pass (pass) {
+      if(!pass) return false;
+      if(pass == "") return false;
+      return true;
+    }
+
+  </script>
 </html>
