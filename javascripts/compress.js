@@ -7,20 +7,22 @@ var LZW = {
 
         var n = 0;
 
-        var alfa = 'abcdefghijklmnopqrstuvwxyv';
+        var alfa = '0123456789abcdefghijklmnopqrstuvwxyv';
 
-        var p = 0;
-
-        for(var i = s.length - 1; i > 0; i--){
+        var p = 1;
+        
+        for(var i = s.length - 1; i >= 0; i--){
 
             var k = s[i];
 
-            if(alfa.indexOf(k) == -1)
+            if(alfa.indexOf(k) == -1) {
                 alfa+=k
-            
-            var v = alfa.indexOf(k);
+                var v = alfa.indexOf(k) + 257;
+            } else {
+                var v = k.charCodeAt(0)
+            }
 
-            n += alfa.length*p;
+            n += (v*p);
 
             p += 1;
 
@@ -96,7 +98,7 @@ var LZW = {
         }
         
         w = String.fromCharCode(compressed[0] - pwd);
-        console.log(w);
+        
         result = w;
 
         for (i = 1; i < compressed.length; i += 1) {
@@ -105,7 +107,7 @@ var LZW = {
             if (dictionary[k]) {
                 entry = dictionary[k];
             } else {
-                console.log(k,dictSize + pwd);
+                
                 if (parseInt(k) === (dictSize + pwd)) {
                     entry = w + w.charAt(0);
                 } else {
@@ -116,7 +118,7 @@ var LZW = {
  
             result += entry;
 
-            console.log(result)
+            
  
             // Add w+entry[0] to the dictionary.
             var key = dictSize++;
